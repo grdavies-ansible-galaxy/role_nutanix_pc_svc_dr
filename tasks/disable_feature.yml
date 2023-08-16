@@ -1,0 +1,27 @@
+---
+- name: Disable Prism DR
+  ansible.builtin.uri:
+    url: "https://{{ nutanix_host }}:{{ nutanix_port }}/api/nutanix/v3/services/disaster_recovery"
+    method: POST
+    body:
+      state: DISABLE
+    validate_certs: "{{ validate_certs }}"
+    body_format: json
+    status_code: 202
+    headers:
+      Authorization: "{{ nutanix_api_auth }}"
+  register: nutanix_prism_dr_disable
+
+- name: Debug nutanix_prism_dr_disable
+  ansible.builtin.debug:
+    var: nutanix_prism_dr_disable
+  when:
+    - nutanix_debug
+
+- name: Wait for Prism DR enable task to complete
+  ansible.builtin.import_role:
+    name: grdavies.role_nutanix_prism_monitor_task
+  vars:
+    nutanix_task_uuid: "{{ nutanix_prism_dr_disable.json.task_uuid }}"
+    nutanix_task_retries: 60
+    nutanix_task_retry_delay: 15

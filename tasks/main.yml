@@ -1,0 +1,31 @@
+---
+# tasks file for nutanix_role_prism_dr
+- name: Setup connection to Nutanix API
+  ansible.builtin.include_tasks: setup_api.yml
+
+- name: "Task can only be run against Prism Central"
+  ansible.builtin.fail:
+    msg: "'nutanix_host' needs to be set to the IP or VIP of Prism Central. Please check the variable and try again."
+  when:
+    - nutanix_endpoint_prism_type != 'pc'
+
+- name: Get Prism DR state
+  ansible.builtin.include_tasks: get_state.yml
+
+# - name: Check Prism DR Pre-Reqs
+#   include_tasks: check_prereqs.yml
+#   when:
+#     - nutanix_prism_dr_state.json.service_enablement_status != "ENABLED"
+#     - nutanix_prism_dr_enable | default(False)
+
+- name: Enable Prism DR
+  ansible.builtin.include_tasks: enable_feature.yml
+  when:
+    - nutanix_prism_dr_state.json.service_enablement_status != "ENABLED"
+    - nutanix_prism_dr_enable | default(False)
+
+- name: Disable Prism DR
+  ansible.builtin.include_tasks: disable_feature.yml
+  when:
+    - nutanix_prism_dr_state.json.service_enablement_status == "ENABLED"
+    - nutanix_prism_dr_enable | default(True)

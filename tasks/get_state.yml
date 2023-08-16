@@ -1,0 +1,21 @@
+---
+- name: Get current Prism DR Status
+  ansible.builtin.uri:
+    url: "https://{{ nutanix_host }}:{{ nutanix_port }}/api/nutanix/v3/services/disaster_recovery/status"
+    method: GET
+    validate_certs: "{{ validate_certs }}"
+    body_format: json
+    status_code: 200
+    headers:
+      Authorization: "{{ nutanix_api_auth }}"
+  register: nutanix_prism_dr_state
+
+- name: Debug nutanix_prism_dr_state
+  ansible.builtin.debug:
+    var: nutanix_prism_dr_state
+  when:
+    - nutanix_debug
+
+- name: Current status of Prism DR service(s)
+  ansible.builtin.debug:
+    msg: "Prism DR is currently in a '{{ nutanix_prism_dr_state.json.service_enablement_status }}' state."
