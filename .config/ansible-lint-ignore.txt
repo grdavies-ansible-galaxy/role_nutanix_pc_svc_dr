@@ -1,2 +1,2 @@
-tasks/disable_feature.yml var-naming[no-role-prefix]
-tasks/enable_feature.yml var-naming[no-role-prefix]
+tasks/disable_service.yml var-naming[no-role-prefix]
+tasks/enable_service.yml var-naming[no-role-prefix]
