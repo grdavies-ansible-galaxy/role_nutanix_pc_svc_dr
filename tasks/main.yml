@@ -21,11 +21,11 @@
 - name: Enable Prism DR
   ansible.builtin.include_tasks: enable_service.yml
   when:
-    - nutanix_prism_dr_state.json.service_enablement_status != "ENABLED"
-    - nutanix_prism_dr_enable | default(False)
+    - nutanix_prism_dr_state.json.service_enablement_status | lower != "enabled"
+    - nutanix_prism_dr_enable | default(false)
 
 - name: Disable Prism DR
   ansible.builtin.include_tasks: disable_service.yml
   when:
-    - nutanix_prism_dr_state.json.service_enablement_status == "ENABLED"
-    - nutanix_prism_dr_enable | default(True)
+    - nutanix_prism_dr_state.json.service_enablement_status | lower == "enabled"
+    - not nutanix_prism_dr_enable | default(true)

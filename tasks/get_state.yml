@@ -18,4 +18,4 @@
 
 - name: Current status of Prism DR service(s)
   ansible.builtin.debug:
-    msg: "Prism DR is currently in a '{{ nutanix_prism_dr_state.json.service_enablement_status }}' state."
+    msg: "Prism DR is currently in a '{{ nutanix_prism_dr_state.json.service_enablement_status | lower }}' state."
