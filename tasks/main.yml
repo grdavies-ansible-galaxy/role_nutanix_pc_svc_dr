@@ -1,13 +1,21 @@
 ---
-# tasks file for nutanix_role_prism_dr
+# tasks file for role_nutanix_pc_svc_dr
 - name: Setup connection to Nutanix API
-  ansible.builtin.include_tasks: setup_api.yml
+  ansible.builtin.include_role:
+    name: grdavies.role_nutanix_prism_api
+  vars:
+    role_nutanix_prism_api_host: "{{ role_nutanix_pc_svc_dr_host }}"
+    role_nutanix_prism_api_username: "{{ role_nutanix_pc_svc_dr_username }}"
+    role_nutanix_prism_api_password: "{{ role_nutanix_pc_svc_dr_password | default(omit) }}"
+    role_nutanix_prism_api_port: "{{ role_nutanix_pc_svc_dr_port | default(omit) }}"
+    role_nutanix_prism_api_validate_certs: "{{ role_nutanix_pc_svc_dr_validate_certs | default(omit) }}"
+    role_nutanix_prism_api_debug: "{{ role_nutanix_pc_svc_dr_debug | default(omit) }}"
 
 - name: "Task can only be run against Prism Central"
   ansible.builtin.fail:
-    msg: "'nutanix_host' needs to be set to the IP or VIP of Prism Central. Please check the variable and try again."
+    msg: "'role_nutanix_pc_svc_dr_host' needs to be set to the IP or VIP of Prism Central. Please check the variable and try again."
   when:
-    - nutanix_endpoint_prism_type != 'pc'
+    - role_nutanix_prism_api_endpoint_type != 'pc'
 
 - name: Get Prism DR state
   ansible.builtin.include_tasks: get_state.yml
@@ -15,17 +23,17 @@
 # - name: Check Prism DR Pre-Reqs
 #   include_tasks: check_prereqs.yml
 #   when:
-#     - nutanix_prism_dr_state.json.service_enablement_status != "ENABLED"
-#     - nutanix_prism_dr_enable | default(False)
+#     - role_nutanix_pc_svc_dr_state.json.service_enablement_status != "ENABLED"
+#     - role_nutanix_pc_svc_dr_enable | default(False)
 
 - name: Enable Prism DR
   ansible.builtin.include_tasks: enable_service.yml
   when:
-    - nutanix_prism_dr_state.json.service_enablement_status | lower != "enabled"
-    - nutanix_prism_dr_enable | default(false)
+    - role_nutanix_pc_svc_dr_state.json.service_enablement_status | lower != "enabled"
+    - role_nutanix_pc_svc_dr_enable | default(false)
 
 - name: Disable Prism DR
   ansible.builtin.include_tasks: disable_service.yml
   when:
-    - nutanix_prism_dr_state.json.service_enablement_status | lower == "enabled"
-    - not nutanix_prism_dr_enable | default(true)
+    - role_nutanix_pc_svc_dr_state.json.service_enablement_status | lower == "enabled"
+    - not role_nutanix_pc_svc_dr_enable | default(true)
