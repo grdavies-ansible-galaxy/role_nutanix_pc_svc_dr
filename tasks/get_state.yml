@@ -3,7 +3,7 @@
   ansible.builtin.uri:
     url: "https://{{ role_nutanix_prism_api_url_base }}/api/nutanix/v3/services/disaster_recovery/status"
     method: GET
-    validate_certs: "{{ role_nutanix_pc_svc_dr_validate_certs }}"
+    validate_certs: "{{ role_nutanix_pc_svc_dr_host_validate_certs }}"
     body_format: json
     status_code: 200
     headers:

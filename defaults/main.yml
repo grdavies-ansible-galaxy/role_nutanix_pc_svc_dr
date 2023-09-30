@@ -1,9 +1,9 @@
 ---
 # defaults file for nutanix_role_prism_draas
 role_nutanix_pc_svc_dr_host: ""
-role_nutanix_pc_svc_dr_username: ""
-role_nutanix_pc_svc_dr_password: ""
-role_nutanix_pc_svc_dr_port: 9440
-role_nutanix_pc_svc_dr_validate_certs: false
+role_nutanix_pc_svc_dr_host_username: ""
+role_nutanix_pc_svc_dr_host_password: ""
+role_nutanix_pc_svc_dr_host_port: 9440
+role_nutanix_pc_svc_dr_host_validate_certs: false
 role_nutanix_pc_svc_dr_debug: false
 role_nutanix_pc_svc_dr_enable: false
